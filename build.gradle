@@ -1,0 +1,50 @@
+plugins {
+    id 'org.jetbrains.kotlin.jvm' version '1.2.41'
+    id 'org.jetbrains.kotlin.plugin.spring' version '1.2.41'
+    id 'io.spring.dependency-management' version '1.0.6.RELEASE'
+    id 'groovy'
+    id 'idea'
+}
+
+ext {
+    springBootVersion = '2.0.6.RELEASE'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+compileKotlin {
+    kotlinOptions {
+        freeCompilerArgs = ["-Xjsr305=strict"]
+        jvmTarget = "1.8"
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.boot:spring-boot-dependencies:${springBootVersion}"
+    }
+}
+
+dependencies {
+    implementation('org.springframework.boot:spring-boot-starter')
+    implementation('org.springframework.kafka:spring-kafka')
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
+    implementation("org.jetbrains.kotlin:kotlin-reflect")
+
+    compileOnly('org.springframework.boot:spring-boot-configuration-processor')
+
+    testImplementation('org.springframework.boot:spring-boot-test')
+    testImplementation('org.springframework.kafka:spring-kafka-test')
+    testImplementation('org.spockframework:spock-core:1.1-groovy-2.4')
+    testImplementation('org.spockframework:spock-spring:1.1-groovy-2.4')
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '4.10.2'
+    distributionUrl = "http://services.gradle.org/distributions/gradle-${gradleVersion}-bin.zip"
+}
